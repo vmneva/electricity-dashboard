@@ -1,0 +1,45 @@
+@use "./_colors.scss" as _colors;
+
+.button-primary {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 500;
+  color: _colors.$text-light;
+  background: _colors.$accent;
+  border: 2px solid _colors.$border;
+  border-radius: 5px;
+  padding: 10px 10px;
+  font-size: 16px;
+  transition: border-color 0.3s;
+
+  &:hover {
+    border-color: _colors.$border-hover;
+    background: _colors.$accent-hover;
+    cursor: pointer;
+  }
+  &:focus-visible {
+    outline: 2px solid _colors.$border;
+    outline-offset: 2px;
+  }
+}
+
+.button-secondary {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 500;
+  color: _colors.$text-dark;
+  background: _colors.$bg-light;
+  border: 2px solid _colors.$border;
+  border-radius: 5px;
+  padding: 10px 10px;
+  font-size: 16px;
+  transition: border-color 0.3s;
+
+  &:hover {
+    border-color: _colors.$border-hover;
+    background: _colors.$bg-light;
+    cursor: pointer;
+  }
+  &:focus-visible {
+    outline: 2px solid _colors.$border;
+    outline-offset: 2px;
+  }
+}
