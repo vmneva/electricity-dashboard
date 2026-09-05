@@ -32,8 +32,8 @@ namespace ElectricityData.Api.Controllers
                 AverageHourlyPrice = (decimal)(dayData.Average(d => d.HourlyPrice) ?? 0),
                 CheapestHour = new CheapestHour
                 {
-                    Hour = HourPriceHelper.GetCheapestHour(hourlyData).Hour,
-                    Price = HourPriceHelper.GetCheapestHour(hourlyData).Price
+                    Hour = HourPriceHelper.GetCheapestHour(hourlyData)?.Hour ?? null,
+                    Price = HourPriceHelper.GetCheapestHour(hourlyData)?.Price ?? null
                 }
             };
         }
@@ -96,8 +96,8 @@ namespace ElectricityData.Api.Controllers
                     AverageHourlyPrice = (decimal)(day.AverageHourlyPrice ?? 0),
                     CheapestHour = new CheapestHour
                     {
-                        Hour = HourPriceHelper.GetCheapestHour(hourlyDataForDay).Hour,
-                        Price = HourPriceHelper.GetCheapestHour(hourlyDataForDay).Price
+                        Hour = HourPriceHelper.GetCheapestHour(hourlyDataForDay)?.Hour ?? null,
+                        Price = HourPriceHelper.GetCheapestHour(hourlyDataForDay)?.Price ?? null
                     }
                 });
             }

@@ -5,8 +5,13 @@ namespace ElectricityData.Api.Helpers
     public static class HourPriceHelper
     {
         // Method to resolve the cheapest hour of the day
-        public static CheapestHour GetCheapestHour(List<(DateTime? Hour, double? Price)> data)
+        public static CheapestHour? GetCheapestHour(List<(DateTime? Hour, double? Price)> data)
         {
+            if (data == null || !data.Any(d => d.Price.HasValue))
+            {
+                return null;
+            }
+
             var (Hour, Price) = data
                 .Where(d => d.Price.HasValue)
                 .OrderBy(d => d.Price)
@@ -14,8 +19,8 @@ namespace ElectricityData.Api.Helpers
 
             return new CheapestHour
             {
-                Hour = Hour?.TimeOfDay ?? TimeSpan.Zero,
-                Price = (decimal?)Price ?? 0
+                Hour = Hour?.TimeOfDay ?? null,
+                Price = (decimal?)Price ?? null
             };
         }
     }
