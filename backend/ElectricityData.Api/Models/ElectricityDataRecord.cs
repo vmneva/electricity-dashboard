@@ -9,7 +9,7 @@ public class ElectricityDataRecord
     public int Id { get; set; }
 
     [JsonPropertyName("date")]
-    public DateTime? Date { get; set; }
+    public DateOnly? Date { get; set; }
 
     [JsonPropertyName("startTime")]
     public DateTime? StartTime { get; set; }
