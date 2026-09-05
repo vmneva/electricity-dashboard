@@ -17,6 +17,8 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<ElectricityDbContext>(options =>
     options.UseNpgsql(db));
 
+builder.Services.AddCors();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -26,6 +28,13 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// adding CORS since frontend runs in port 5173
+app.UseCors(builder =>
+    builder.WithOrigins("http://localhost:5173")
+           .AllowAnyHeader()
+           .AllowAnyMethod()
+);
 
 app.MapControllers();
 

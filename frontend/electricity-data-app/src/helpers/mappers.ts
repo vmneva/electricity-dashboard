@@ -1,0 +1,25 @@
+// Mapper for transforming API data into frontend-friendly format
+import type { components } from "../api/schema";
+import type { DayData } from "../types/dayData";
+import { roundToDecimals, parseHour } from "./formatters";
+
+/*
+ * Maps API data to a DayData object used in the UI
+ */
+export function mapApiDataToDailyData(
+  apiData: components["schemas"]["DailyData"],
+): DayData {
+  return {
+    date: new Date(apiData.date ?? "").toLocaleDateString(),
+    consumptionAmount: roundToDecimals(apiData.consumptionAmount as number, 2),
+    productionAmount: roundToDecimals(apiData.productionAmount as number, 2),
+    averageHourlyPrice: roundToDecimals(
+      apiData.averageHourlyPrice as number,
+      3,
+    ),
+    cheapestHour: {
+      hour: parseHour(apiData.cheapestHour?.hour ?? ""),
+      price: roundToDecimals(apiData.cheapestHour?.price as number, 3),
+    },
+  };
+}
