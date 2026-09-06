@@ -40,56 +40,62 @@ function DataTable({ dayData }: Props) {
   }
 
   return (
-    <div className={`table-panel table-panel--${pageSize}`} tabIndex={0}>
-      <table className="table">
-        <thead>
-          <tr>
-            {renderHeaderCell("Date", "date", true)}
-            {renderHeaderCell(
-              "Total Consumption (kWh)",
-              "consumptionAmount",
-              true,
-            )}
-            {renderHeaderCell(
-              "Total Production (MWh/h)",
-              "productionAmount",
-              true,
-            )}
-            {renderHeaderCell(
-              "Average Price (snt/kWh)",
-              "averageHourlyPrice",
-              true,
-            )}
-            {renderHeaderCell("Cheapest Hour", "cheapestHour", false)}
-          </tr>
-        </thead>
-        <tbody>
-          {dayData.map((data) => (
-            <tr key={data.date}>
-              <td data-label="Date">{data.date}</td>
-              <td data-label="Consumption">
-                {data.consumptionAmount}
-                <span className="unit">kWh</span>
-              </td>
-              <td data-label="Production">
-                {data.productionAmount}
-                <span className="unit">MWh/h</span>
-              </td>
-              <td data-label="Average price">
-                {data.averageHourlyPrice}
-                <span className="unit">snt/kWh</span>
-              </td>
-              <td data-label="Cheapest hour">
-                {data.cheapestHour.hour}{" "}
-                <span className="unit">
-                  ({data.cheapestHour.price} snt/kWh)
-                </span>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <>
+      {dayData.length === 0 ? (
+        <p>No data available. Please adjust the filters above.</p>
+      ) : (
+        <div className={`table-panel table-panel--${pageSize}`} tabIndex={0}>
+          <table className="table">
+            <thead>
+              <tr>
+                {renderHeaderCell("Date", "date", true)}
+                {renderHeaderCell(
+                  "Total Consumption (kWh)",
+                  "consumptionAmount",
+                  true,
+                )}
+                {renderHeaderCell(
+                  "Total Production (MWh/h)",
+                  "productionAmount",
+                  true,
+                )}
+                {renderHeaderCell(
+                  "Average Price (snt/kWh)",
+                  "averageHourlyPrice",
+                  true,
+                )}
+                {renderHeaderCell("Cheapest Hour", "cheapestHour", false)}
+              </tr>
+            </thead>
+            <tbody>
+              {dayData.map((data) => (
+                <tr key={data.date}>
+                  <td data-label="Date">{data.date}</td>
+                  <td data-label="Consumption">
+                    {data.consumptionAmount}
+                    <span className="unit">kWh</span>
+                  </td>
+                  <td data-label="Production">
+                    {data.productionAmount}
+                    <span className="unit">MWh/h</span>
+                  </td>
+                  <td data-label="Average price">
+                    {data.averageHourlyPrice}
+                    <span className="unit">snt/kWh</span>
+                  </td>
+                  <td data-label="Cheapest hour">
+                    {data.cheapestHour.hour}{" "}
+                    <span className="unit">
+                      ({data.cheapestHour.price} snt/kWh)
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </>
   );
 }
 

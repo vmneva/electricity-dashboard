@@ -22,11 +22,16 @@ function Pagination({ totalPages }: PaginationProps) {
 
   return (
     <div className="pagination">
-      <div className="buttons">
-        <button onClick={() => onChange(1, pageSize)} disabled={page == 1}>
+      <div className="btn-group">
+        <button
+          className="button-secondary-small"
+          onClick={() => onChange(1, pageSize)}
+          disabled={page == 1}
+        >
           First
         </button>
         <button
+          className="button-secondary-small"
           onClick={() => onChange(page - 1, pageSize)}
           disabled={page <= 1}
         >
@@ -36,12 +41,14 @@ function Pagination({ totalPages }: PaginationProps) {
           Page {page} of {totalPages}
         </span>
         <button
+          className="button-secondary-small"
           onClick={() => onChange(page + 1, pageSize)}
           disabled={page >= totalPages}
         >
           Next ➡️
         </button>
         <button
+          className="button-secondary-small"
           onClick={() => onChange(totalPages, pageSize)}
           disabled={page == totalPages}
         >

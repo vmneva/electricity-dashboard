@@ -4,23 +4,30 @@ import Pagination from "./components/Pagination";
 import "./scss/styles.scss";
 import "./App.scss";
 import { useDailyData } from "./hooks/useDailyData";
+import FilterBar from "./components/FilterBar";
+import { useState } from "react";
 
 function App() {
   const { pagination } = useAppContext();
-  const {
-    data,
-    isLoading: isListLoading,
-    isFetching: isListFetching,
-    error: listError,
-  } = useDailyData(pagination);
+  const [searchDate, setSearchDate] = useState("");
+
+  const { data, isLoading, isFetching, error } = useDailyData(
+    pagination,
+    searchDate,
+  );
+
+  function onSearchClick(date: string) {
+    setSearchDate(date);
+  }
 
   return (
     <div className="mainview">
       <h1>Electricity Data Dashboard</h1>
-      {isListLoading && <p>Loading...</p>}
-      {listError && <p>Error loading data</p>}
+      {isLoading && <p>Loading...</p>}
+      {error && <p>Error loading data</p>}
       {data && (
-        <div className={isListFetching ? "is-updating" : undefined}>
+        <div className={isFetching ? "is-updating" : "contents"}>
+          <FilterBar onClick={onSearchClick} />
           <DataTable dayData={data.data} />
           <Pagination totalPages={data.totalPages} />
         </div>

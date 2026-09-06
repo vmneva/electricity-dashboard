@@ -47,7 +47,7 @@ namespace ElectricityData.Api.Controllers
         /// <param name="orderBy">Determines the column to order by</param>
         /// <returns>List of daily electricity data for the specified page with the given page size</returns>
         [HttpGet("daily-data")]
-        public async Task<PaginatedResponse> GetPageOfDailyData(int pageSize, int pageNumber, string orderDir = "asc", string orderBy = "date")
+        public async Task<PaginatedResponse> GetPageOfDailyData(int pageSize, int pageNumber, string orderDir = "asc", string orderBy = "date", string search = "")
         {
             // QUERY 1: fetch, aggregate, and order the data to daily rows
             var allDays = db.ElectricityDataRecords
@@ -59,6 +59,12 @@ namespace ElectricityData.Api.Controllers
                     ConsumptionAmount = e.Sum(d => d.ConsumptionAmount),
                     AverageHourlyPrice = e.Average(d => d.HourlyPrice)
                 });
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                var date = DateOnly.TryParse(search, out var parsedDate) ? parsedDate : (DateOnly?)null;
+                allDays = allDays.Where(d => d.Date != null && d.Date.Value == date);
+            }
 
             bool descending = orderDir?.ToLower() == "desc";
             allDays = orderBy.ToLowerInvariant() switch

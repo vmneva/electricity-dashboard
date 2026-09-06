@@ -1,42 +1,60 @@
 @use "./_colors.scss" as _colors;
+@use "./_typography.scss" as _typography;
 
-.button-primary {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  font-weight: 500;
-  color: _colors.$text-light;
+.button-primary-small {
+  padding: 0.4rem 0.6rem;
   background: _colors.$accent;
-  border: 2px solid _colors.$border;
-  border-radius: 5px;
-  padding: 10px 10px;
-  font-size: 16px;
-  transition: border-color 0.3s;
+  border: 1px solid _colors.$border;
+  border-radius: 0.5rem;
+  color: _colors.$text-light;
+  font: inherit;
+  font-weight: 500;
+  font-family: _typography.$font-family;
+  cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease;
 
-  &:hover {
-    cursor: pointer;
+  &:hover:not(:disabled) {
+    background: _colors.$accent-hover;
+    border-color: _colors.$accent-hover;
   }
-  &:focus-visible {
-    outline: 2px solid _colors.$border;
-    outline-offset: 2px;
+
+  &:disabled {
+    color: _colors.$text-medium;
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 }
 
-.button-secondary {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  font-weight: 500;
-  color: _colors.$text-dark;
+.button-secondary-small {
+  padding: 0.4rem 0.6rem;
   background: _colors.$bg-light;
-  border: 2px solid _colors.$border;
-  border-radius: 5px;
-  padding: 10px 10px;
-  font-size: 16px;
-  transition: border-color 0.3s;
+  border: 1px solid _colors.$border;
+  border-radius: 0.5rem;
+  color: _colors.$text-dark;
+  font: inherit;
+  font-weight: 500;
+  font-family: _typography.$font-family;
+  cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease;
 
-  &:hover {
-    background: _colors.$bg-light;
-    cursor: pointer;
+  &:hover:not(:disabled) {
+    background: _colors.$bg-hover;
+    border-color: color-mix(in srgb, _colors.$accent 35%, _colors.$border);
   }
-  &:focus-visible {
-    outline: 2px solid _colors.$border;
-    outline-offset: 2px;
+
+  &:disabled {
+    color: _colors.$text-medium;
+    opacity: 0.5;
+    cursor: not-allowed;
   }
+}
+
+.btn-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }

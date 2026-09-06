@@ -3,7 +3,7 @@ import type { components } from "./schema";
 import {
   mapApiDataToDailyData,
   mapApiDataToPaginatedData,
-} from "../helpers/mappers";
+} from "../utils/mappers";
 import type { PaginatedData } from "../types/paginatedData";
 
 const baseUrl = "/api/electricity/daily-data";
@@ -32,9 +32,10 @@ export async function getDailyDataAsync(
   size: number,
   orderBy: string,
   orderDir: "asc" | "desc",
+  search?: string,
 ): Promise<PaginatedData> {
   const response = await fetch(
-    `${baseUrl}?pageSize=${size}&pageNumber=${page}&orderBy=${orderBy}&orderDir=${orderDir}`,
+    `${baseUrl}?pageSize=${size}&pageNumber=${page}&orderBy=${orderBy}&orderDir=${orderDir}&search=${search ?? ""}`,
   );
   if (!response.ok) {
     throw new Error(`Error fetching data: ${response.status}`);

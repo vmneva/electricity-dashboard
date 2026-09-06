@@ -1,5 +1,6 @@
 @use "sass:map";
 @use "_colors" as colors;
+@use "_typography" as typography;
 
 $narrow: 46rem;
 
@@ -72,15 +73,7 @@ $page-sizes: (
   font-size: var(--cell-font);
   font-variant-numeric: tabular-nums;
   line-height: 1.45;
-  font-family:
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Roboto,
-    "Helvetica Neue",
-    Arial,
-    sans-serif;
+  font-family: typography.$font-family;
 
   th,
   td {
