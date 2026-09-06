@@ -30,9 +30,11 @@ export async function getSingleDayDataAsync(date: string): Promise<DayData> {
 export async function getDailyDataAsync(
   page: number,
   size: number,
+  orderBy: string,
+  orderDir: "asc" | "desc",
 ): Promise<PaginatedData> {
   const response = await fetch(
-    `${baseUrl}?pageSize=${size}&pageNumber=${page}`,
+    `${baseUrl}?pageSize=${size}&pageNumber=${page}&orderBy=${orderBy}&orderDir=${orderDir}`,
   );
   if (!response.ok) {
     throw new Error(`Error fetching data: ${response.status}`);

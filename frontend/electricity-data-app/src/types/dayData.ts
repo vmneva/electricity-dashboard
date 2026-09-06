@@ -3,8 +3,8 @@
  */
 export type DayData = {
   date: string;
-  consumptionAmount: number;
-  productionAmount: number;
+  consumptionAmount: string;
+  productionAmount: string;
   averageHourlyPrice: number;
   cheapestHour: {
     hour: string;

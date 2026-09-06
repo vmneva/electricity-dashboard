@@ -2,6 +2,7 @@
 @use "./_buttons.scss";
 @use "./_tables.scss";
 @use "./_pagination.scss";
+@use "./_inputs.scss";
 
 // --- typography ---
 h1,
@@ -23,18 +24,4 @@ p {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 14px;
   color: _colors.$text-dark;
-}
-
-// --- input ---
-.input-field {
-  border: 1px solid _colors.$border;
-  padding: 8px;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 14px;
-  border-radius: 4px;
-}
-label {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 14px;
-  margin-bottom: 4px;
 }

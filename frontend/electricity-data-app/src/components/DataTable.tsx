@@ -1,22 +1,65 @@
 import type { DayData } from "../types/dayData";
+import { useContext } from "react";
+import AppContext from "../AppContext";
 import "../scss/styles.scss";
 
 type Props = {
   dayData: DayData[];
-  pageSize: number;
+  onOrderByChange: (newOrderBy: string) => void;
+  onOrderDirChange: (newOrderDir: "asc" | "desc") => void;
 };
 
-function DataTable({ dayData, pageSize }: Props) {
+function DataTable({ dayData, onOrderByChange, onOrderDirChange }: Props) {
+  const { pageSize, orderBy, orderDir } = useContext(AppContext);
+
+  function handleHeaderClick(column: string) {
+    const newOrderDir =
+      orderBy === column && orderDir === "asc" ? "desc" : "asc";
+    onOrderByChange(column);
+    onOrderDirChange(newOrderDir);
+  }
+
+  function renderHeaderCell(
+    label: string,
+    value: string,
+    isOrderable: boolean = true,
+  ) {
+    return (
+      <th>
+        {isOrderable ? (
+          <button onClick={() => handleHeaderClick(value)}>
+            {label}{" "}
+            {orderBy === value ? (orderDir === "asc" ? "🔽" : "🔼") : "🔽"}
+          </button>
+        ) : (
+          label
+        )}
+      </th>
+    );
+  }
+
   return (
     <div className={`table-panel table-panel--${pageSize}`} tabIndex={0}>
       <table className="table">
         <thead>
           <tr>
-            <th>Date</th>
-            <th>Total Consumption (kWh)</th>
-            <th>Total Production (MWh/h)</th>
-            <th>Average Price (snt/kWh)</th>
-            <th>Cheapest Hour</th>
+            {renderHeaderCell("Date", "date", true)}
+            {renderHeaderCell(
+              "Total Consumption (kWh)",
+              "consumptionAmount",
+              true,
+            )}
+            {renderHeaderCell(
+              "Total Production (MWh/h)",
+              "productionAmount",
+              true,
+            )}
+            {renderHeaderCell(
+              "Average Price (snt/kWh)",
+              "averageHourlyPrice",
+              true,
+            )}
+            {renderHeaderCell("Cheapest Hour", "cheapestHour", false)}
           </tr>
         </thead>
         <tbody>

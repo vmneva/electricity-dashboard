@@ -1,11 +1,11 @@
 import "../scss/styles.scss";
+import { useContext } from "react";
+import AppContext from "../AppContext";
 /**
  * Component to render pagination controls for the table.
  */
 
 type PaginationProps = {
-  pageNumber: number;
-  pageSize: number;
   totalPages: number;
   itemsOnCurrentPage: number;
   onPageChange: (newPage: number) => void;
@@ -13,36 +13,33 @@ type PaginationProps = {
 };
 
 function Pagination({
-  pageNumber,
-  pageSize,
   totalPages,
   onPageChange,
   onPageSizeChange,
 }: PaginationProps) {
+  const { page, pageSize } = useContext(AppContext);
+
   return (
     <div className="pagination">
       <div className="buttons">
-        <button onClick={() => onPageChange(1)} disabled={pageNumber == 1}>
+        <button onClick={() => onPageChange(1)} disabled={page == 1}>
           First
         </button>
-        <button
-          onClick={() => onPageChange(pageNumber - 1)}
-          disabled={pageNumber <= 1}
-        >
+        <button onClick={() => onPageChange(page - 1)} disabled={page <= 1}>
           ⬅️ Previous
         </button>
         <span className="currentPage" aria-live="polite">
-          Page {pageNumber} of {totalPages}
+          Page {page} of {totalPages}
         </span>
         <button
-          onClick={() => onPageChange(pageNumber + 1)}
-          disabled={pageNumber >= totalPages}
+          onClick={() => onPageChange(page + 1)}
+          disabled={page >= totalPages}
         >
           Next ➡️
         </button>
         <button
           onClick={() => onPageChange(totalPages)}
-          disabled={pageNumber == totalPages}
+          disabled={page == totalPages}
         >
           Last
         </button>
