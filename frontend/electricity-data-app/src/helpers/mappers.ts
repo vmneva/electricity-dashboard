@@ -23,3 +23,16 @@ export function mapApiDataToDailyData(
     },
   };
 }
+
+/*
+ * Maps API data to a PaginatedData object used in the UI
+ */
+export function mapApiDataToPaginatedData(
+  apiData: components["schemas"]["PaginatedResponse"],
+): PaginatedData {
+  return {
+    totalPages: apiData.allPages as number,
+    data: apiData.dailyRows?.map(mapApiDataToDailyData) ?? [],
+  };
+}
+import type { PaginatedData } from "../types/paginatedData";

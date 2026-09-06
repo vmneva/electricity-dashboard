@@ -1,5 +1,7 @@
 @use "./_colors.scss" as _colors;
 @use "./_buttons.scss";
+@use "./_tables.scss";
+@use "./_pagination.scss";
 
 // --- typography ---
 h1,
@@ -17,37 +19,15 @@ h2 {
   line-height: 118%;
   letter-spacing: -0.24px;
 }
-
-// --- table ---
-.table {
-  width: 100%;
-  border-collapse: collapse;
+p {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  font-weight: 400;
-}
-
-.table th,
-.table td {
-  border: 1px solid #ddd;
-  padding: 8px;
-}
-
-.table th {
-  background-color: #f4f4f4;
-  text-align: left;
-}
-
-.table tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-.table tr:hover {
-  background-color: #f1f1f1;
+  font-size: 14px;
+  color: _colors.$text-dark;
 }
 
 // --- input ---
 .input-field {
-  border: 1px solid #ccc;
+  border: 1px solid _colors.$border;
   padding: 8px;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 14px;

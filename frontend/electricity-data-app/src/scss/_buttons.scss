@@ -12,8 +12,6 @@
   transition: border-color 0.3s;
 
   &:hover {
-    border-color: _colors.$border-hover;
-    background: _colors.$accent-hover;
     cursor: pointer;
   }
   &:focus-visible {
@@ -34,7 +32,6 @@
   transition: border-color 0.3s;
 
   &:hover {
-    border-color: _colors.$border-hover;
     background: _colors.$bg-light;
     cursor: pointer;
   }

@@ -11,6 +11,8 @@
     "update-api-schema": "npx openapi-typescript http://localhost:5152/openapi/v1.json -o src/api/schema.ts"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.102.8",
+    "@tanstack/react-query-devtools": "^5.102.8",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "sass": "^1.104.0"

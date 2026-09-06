@@ -1,56 +1,39 @@
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { getSingleDayDataAsync } from "./api/electricityData";
+import { getDailyDataAsync } from "./api/electricityData";
+import DataTable from "./components/DataTable";
+import Pagination from "./components/Pagination";
 import "./scss/styles.scss";
 import "./App.scss";
-import type { DayData } from "./types/dayData";
-import TableRow from "./components/TableRow";
 
 function App() {
-  const [date, setDate] = useState("2021-01-01");
-  const [dayData, setDayData] = useState<DayData | null>(null);
+  const [pageNumber, setPageNumber] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10);
 
-  function fetchData() {
-    getSingleDayDataAsync(date)
-      .then((data) => {
-        setDayData(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["dailyData", pageSize, pageNumber],
+    queryFn: () => getDailyDataAsync(pageNumber, pageSize),
+  });
 
   return (
-    <>
-      <div className="mainview">
-        <h1>Electricity Data Dashboard</h1>
-        <div className="search-container">
-          <input
-            className="input-field"
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
+    <div className="mainview">
+      <h1>Electricity Data Dashboard</h1>
+      {isLoading && <p>Loading...</p>}
+      {error && <p>Error loading data</p>}
+      {data && (
+        <>
+          <DataTable dayData={data.data} pageSize={pageSize} />
+          <Pagination
+            pageNumber={pageNumber}
+            pageSize={pageSize}
+            totalPages={data.totalPages}
+            itemsOnCurrentPage={data.data.length}
+            onPageChange={(newPage) => setPageNumber(newPage)}
+            onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
           />
-          <button className="button-secondary" onClick={() => fetchData()}>
-            Fetch Data
-          </button>
-        </div>
-        {dayData && (
-          <section>
-            <table
-              className="table"
-              style={{ alignSelf: "top", justifySelf: "center" }}
-            >
-              <thead>
-                <TableRow dayData={dayData} isHeader={true} />
-              </thead>
-              <tbody>
-                <TableRow dayData={dayData} isHeader={false} />
-              </tbody>
-            </table>
-          </section>
-        )}
-      </div>
-    </>
+        </>
+      )}
+    </div>
   );
 }
 

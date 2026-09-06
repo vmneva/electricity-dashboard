@@ -1,0 +1,216 @@
+@use "sass:map";
+@use "_colors" as colors;
+
+$narrow: 46rem;
+
+// Density scales with page size: 10 rows can breathe, 50 rows need
+// to stay inside one screenful and get banding to help the eye track.
+$page-sizes: (
+  10: (
+    pad-y: 0.9375rem,
+    font: 0.9375rem,
+    max-h: none,
+    banded: false,
+  ),
+  25: (
+    pad-y: 0.6875rem,
+    font: 0.9063rem,
+    max-h: 34rem,
+    banded: false,
+  ),
+  50: (
+    pad-y: 0.4375rem,
+    font: 0.875rem,
+    max-h: 38rem,
+    banded: true,
+  ),
+);
+
+.table-panel {
+  // overridden per page-size below
+  --cell-pad-y: 0.6875rem;
+  --cell-pad-x: 1.125rem;
+  --cell-font: 0.9063rem;
+  --panel-max-h: 34rem;
+
+  position: relative;
+  max-width: 100%;
+  max-height: 70vh;
+  overflow: auto;
+  overscroll-behavior: contain;
+  background: colors.$bg-light;
+  border: 1px solid colors.$border;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 2px rgba(19, 27, 36, 0.04);
+  -webkit-overflow-scrolling: touch;
+
+  &:focus-visible {
+    outline: 2px solid colors.$accent;
+    outline-offset: 2px;
+  }
+}
+
+@each $rows, $cfg in $page-sizes {
+  .table-panel--#{$rows} {
+    --cell-pad-y: #{map.get($cfg, pad-y)};
+    --cell-font: #{map.get($cfg, font)};
+    --panel-max-h: #{map.get($cfg, max-h)};
+
+    @if map.get($cfg, banded) {
+      .table tbody tr:nth-child(even) {
+        background: colors.$bg-hover;
+      }
+    }
+  }
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  color: colors.$text-dark;
+  font-size: var(--cell-font);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.45;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+
+  th,
+  td {
+    padding: var(--cell-pad-y) var(--cell-pad-x);
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: colors.$accent;
+    color: colors.$text-light;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.005em;
+    box-shadow: inset 0 -1px 0 colors.$border;
+  }
+
+  tbody td {
+    border-top: 1px solid colors.$border;
+  }
+
+  tbody tr:first-child td {
+    border-top: 0;
+  }
+
+  // Date leads, measurements follow — right-aligned so decimal points
+  // stack down the column and outliers are visible at a glance.
+  th:nth-child(n + 2),
+  td:nth-child(n + 2) {
+    text-align: right;
+  }
+
+  td:first-child {
+    font-weight: 500;
+    // room for the hover marker so text doesn't shift
+    box-shadow: inset 2px 0 0 transparent;
+  }
+
+  tbody tr {
+    transition: background-color 120ms ease;
+
+    &:hover {
+      background: colors.$bg-hover;
+
+      td:first-child {
+        box-shadow: inset 2px 0 0 var(--accent);
+      }
+    }
+  }
+}
+
+.unit {
+  margin-left: 0.25em;
+  color: colors.$text-medium;
+  font-size: 0.85em;
+  font-variant-numeric: normal;
+}
+
+// ── Small screens ────────────────────────────────────────────
+// Five numeric columns can't shrink honestly, so each row becomes a
+// stacked record. Needs data-label on each <td>.
+@media (max-width: $narrow) {
+  .table-panel {
+    max-height: none;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    overflow: visible;
+  }
+
+  .table {
+    thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    tbody tr {
+      display: block;
+      margin-bottom: 0.75rem;
+      padding: 0.25rem 0;
+      background: colors.$bg-light;
+      border: 1px solid colors.$border;
+      border-radius: 0.75rem;
+
+      &:hover td:first-child {
+        box-shadow: none;
+      }
+    }
+
+    tbody td {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1.5rem;
+      border-top: 0;
+      padding: 0.4375rem var(--cell-pad-x);
+      white-space: normal;
+
+      &::before {
+        content: attr(data-label);
+        color: colors.$text-medium;
+        font-size: 0.8125rem;
+        font-weight: 500;
+      }
+    }
+
+    td:first-child {
+      padding-top: 0.75rem;
+      font-size: 1rem;
+      font-weight: 600;
+
+      &::before {
+        content: none;
+      }
+    }
+
+    td:last-child {
+      padding-bottom: 0.75rem;
+      padding-left: var(--cell-pad-x);
+      text-align: right;
+    }
+  }
+}
