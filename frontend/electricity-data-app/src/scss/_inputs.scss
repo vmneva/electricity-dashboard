@@ -1,3 +1,5 @@
+@use "./_colors.scss" as _colors;
+
 .input-field {
   border: 1px solid _colors.$border;
   padding: 8px;

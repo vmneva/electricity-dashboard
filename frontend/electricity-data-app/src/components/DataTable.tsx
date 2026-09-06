@@ -1,22 +1,23 @@
 import type { DayData } from "../types/dayData";
-import { useContext } from "react";
-import AppContext from "../AppContext";
+import { useAppContext } from "../context/AppContext";
 import "../scss/styles.scss";
 
 type Props = {
   dayData: DayData[];
-  onOrderByChange: (newOrderBy: string) => void;
-  onOrderDirChange: (newOrderDir: "asc" | "desc") => void;
 };
 
-function DataTable({ dayData, onOrderByChange, onOrderDirChange }: Props) {
-  const { pageSize, orderBy, orderDir } = useContext(AppContext);
+function DataTable({ dayData }: Props) {
+  const { pagination, setPagination } = useAppContext();
+  const { pageSize, orderBy, orderDir } = pagination;
 
   function handleHeaderClick(column: string) {
     const newOrderDir =
       orderBy === column && orderDir === "asc" ? "desc" : "asc";
-    onOrderByChange(column);
-    onOrderDirChange(newOrderDir);
+    setPagination((prev) => ({
+      ...prev,
+      orderBy: column,
+      orderDir: newOrderDir,
+    }));
   }
 
   function renderHeaderCell(
