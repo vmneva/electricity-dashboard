@@ -1,12 +1,13 @@
+import "../scss/styles.scss";
+import { formatDate, formatPrice } from "../utils/formatters";
 import type { DayData } from "../types/dayData";
 import { useAppContext } from "../context/AppContext";
-import "../scss/styles.scss";
-
 type Props = {
   dayData: DayData[];
+  setDateSelected: (date: string | null) => void;
 };
 
-function DataTable({ dayData }: Props) {
+function DataTable({ dayData, setDateSelected }: Props) {
   const { pagination, setPagination } = useAppContext();
   const { pageSize, orderBy, orderDir } = pagination;
 
@@ -44,7 +45,7 @@ function DataTable({ dayData }: Props) {
       {dayData.length === 0 ? (
         <p>No data available. Please adjust the filters above.</p>
       ) : (
-        <div className={`table-panel table-panel--${pageSize}`} tabIndex={0}>
+        <div className={`table-panel table-panel--${pageSize}}`} tabIndex={0}>
           <table className="table">
             <thead>
               <tr>
@@ -70,7 +71,16 @@ function DataTable({ dayData }: Props) {
             <tbody>
               {dayData.map((data) => (
                 <tr key={data.date}>
-                  <td data-label="Date">{data.date}</td>
+                  <td data-label="Date" className="canOpen">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setDateSelected(data.date);
+                      }}
+                    >
+                      {formatDate(data.date)}
+                    </button>
+                  </td>
                   <td data-label="Consumption">
                     {data.consumptionAmount}
                     <span className="unit">kWh</span>
@@ -80,14 +90,18 @@ function DataTable({ dayData }: Props) {
                     <span className="unit">MWh/h</span>
                   </td>
                   <td data-label="Average price">
-                    {data.averageHourlyPrice}
-                    <span className="unit">snt/kWh</span>
+                    {formatPrice(data.averageHourlyPrice)}
+                    {data.averageHourlyPrice !== 0 && (
+                      <span className="unit">snt/kWh</span>
+                    )}
                   </td>
                   <td data-label="Cheapest hour">
                     {data.cheapestHour.hour}{" "}
-                    <span className="unit">
-                      ({data.cheapestHour.price} snt/kWh)
-                    </span>
+                    {formatPrice(data.cheapestHour.price) !== "N/A" && (
+                      <span className="unit">
+                        ({formatPrice(data.cheapestHour.price)} snt/kWh)
+                      </span>
+                    )}
                   </td>
                 </tr>
               ))}

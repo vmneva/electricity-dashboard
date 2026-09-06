@@ -15,6 +15,7 @@
     color: _colors.$text-medium;
     font-variant-numeric: tabular-nums;
     text-align: center;
+    font-family: _typography.$font-family;
   }
 
   label {
@@ -23,6 +24,7 @@
     gap: 0.5rem;
     margin-left: auto;
     color: _colors.$text-medium;
+    font-family: _typography.$font-family;
   }
 
   select {

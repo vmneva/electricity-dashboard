@@ -16,7 +16,7 @@ namespace ElectricityData.Api.Controllers
         /// <param name="date">Wanted date in YYYY-MM-DD format</param>
         /// <returns>Daily electricity data for the specified date</returns>
         [HttpGet("daily-data/{date}")]
-        public async Task<DailyData> GetDailyElectricityData([FromRoute] DateOnly date)
+        public async Task<SingleDayData> GetDailyElectricityData([FromRoute] DateOnly date)
         {
             var dayData = await db.ElectricityDataRecords
                 .Where(d => d.Date == date)
@@ -24,17 +24,15 @@ namespace ElectricityData.Api.Controllers
 
             List<(DateTime? Hour, double? Price)> hourlyData = [.. dayData.Select(d => (d.StartTime, (double?)d.HourlyPrice))];
 
-            return new DailyData
+            return new SingleDayData
             {
                 Date = date,
-                ProductionAmount = (decimal)(dayData.Sum(d => d.ProductionAmount) ?? 0),
-                ConsumptionAmount = (decimal)(dayData.Sum(d => d.ConsumptionAmount) ?? 0),
+                ProductionTotal = (decimal)(dayData.Sum(d => d.ProductionAmount) ?? 0),
+                ConsumptionTotal = (decimal)(dayData.Sum(d => d.ConsumptionAmount) ?? 0),
                 AverageHourlyPrice = (decimal)(dayData.Average(d => d.HourlyPrice) ?? 0),
-                CheapestHour = new CheapestHour
-                {
-                    Hour = HourPriceHelper.GetCheapestHour(hourlyData)?.Hour ?? null,
-                    Price = HourPriceHelper.GetCheapestHour(hourlyData)?.Price ?? null
-                }
+                AllHourlyPrices = hourlyData.Select(h => (decimal?)(h.Price ?? 0) ?? 0).ToList(),
+                ProductionAmounts = dayData.Select(d => (decimal?)(d.ProductionAmount ?? 0) ?? 0).ToList(),
+                ConsumptionAmounts = dayData.Select(d => (decimal?)(d.ConsumptionAmount ?? 0) ?? 0).ToList()
             };
         }
 

@@ -6,10 +6,12 @@ import "./App.scss";
 import { useDailyData } from "./hooks/useDailyData";
 import FilterBar from "./components/FilterBar";
 import { useState } from "react";
+import SingleDayDetail from "./components/SingleDayDetail";
 
 function App() {
   const { pagination } = useAppContext();
   const [searchDate, setSearchDate] = useState("");
+  const [dateSelected, setDateSelected] = useState<string | null>(null);
 
   const { data, isLoading, isFetching, error } = useDailyData(
     pagination,
@@ -28,7 +30,13 @@ function App() {
       {data && (
         <div className={isFetching ? "is-updating" : "contents"}>
           <FilterBar onClick={onSearchClick} />
-          <DataTable dayData={data.data} />
+          {dateSelected && (
+            <SingleDayDetail
+              date={dateSelected}
+              onClose={() => setDateSelected(null)}
+            />
+          )}
+          <DataTable dayData={data.data} setDateSelected={setDateSelected} />
           <Pagination totalPages={data.totalPages} />
         </div>
       )}

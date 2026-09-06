@@ -28,9 +28,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["DailyData"];
-                        "application/json": components["schemas"]["DailyData"];
-                        "text/json": components["schemas"]["DailyData"];
+                        "text/plain": components["schemas"]["SingleDayData"];
+                        "application/json": components["schemas"]["SingleDayData"];
+                        "text/json": components["schemas"]["SingleDayData"];
                     };
                 };
             };
@@ -57,6 +57,7 @@ export interface paths {
                     pageNumber?: unknown;
                     orderDir?: string;
                     orderBy?: string;
+                    search?: string;
                 };
                 header?: never;
                 path?: never;
@@ -109,6 +110,19 @@ export interface components {
             dailyRows?: components["schemas"]["DailyData"][];
             /** Format: int32 */
             allPages?: unknown;
+        };
+        SingleDayData: {
+            /** Format: date */
+            date?: string;
+            /** Format: double */
+            productionTotal?: unknown;
+            /** Format: double */
+            consumptionTotal?: unknown;
+            /** Format: double */
+            averageHourlyPrice?: unknown;
+            allHourlyPrices?: unknown[];
+            productionAmounts?: unknown[];
+            consumptionAmounts?: unknown[];
         };
     };
     responses: never;

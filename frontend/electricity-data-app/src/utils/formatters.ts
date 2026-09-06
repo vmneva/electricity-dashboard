@@ -10,7 +10,13 @@ export function roundToDecimals(value: number, decimals: number): number {
   Parses the hour from a string in the format HH:MM
 */
 export function parseHour(value: string): string {
-  return value?.slice(0, 5) ?? "";
+  if (!value) return "N/A";
+  return value?.slice(0, 5);
+}
+
+export function formatPrice(value: number): string {
+  if (value === 0 || value == null) return "N/A";
+  return `${roundToDecimals(value, 2)}`;
 }
 
 /*
@@ -19,4 +25,12 @@ export function parseHour(value: string): string {
 export function formatThousands(value: number): string {
   const rounded = Math.round(value);
   return rounded.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+}
+
+/*
+  Formats a date string in the format YYYY-MM-DD to a more readable format
+*/
+export function formatDate(value: string): string {
+  const date = new Date(value);
+  return date.toLocaleDateString();
 }
