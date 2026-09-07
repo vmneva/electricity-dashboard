@@ -23,7 +23,9 @@ API will run on http://localhost:5152.
 
 ### Running backend without Docker
 
-The database needs to be running in Docker. From `backend/`:
+This is a .NET10 project so first, you need to install .NET10 SDK. You can follow instructions to download it from here: https://dotnet.microsoft.com/en-us/download/dotnet/10.0
+
+Additionally, you need to first start Docker to run the database. When it is running, run from `backend/`:
 
     dotnet run --project ElectricityData.Api
 
