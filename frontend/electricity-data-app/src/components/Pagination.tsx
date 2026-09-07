@@ -1,5 +1,6 @@
 import "../scss/styles.scss";
 import { useAppContext } from "../context/AppContext";
+import type { components } from "../api/schema";
 /**
  * Component to render pagination controls for the table.
  */
@@ -10,13 +11,14 @@ type PaginationProps = {
 
 function Pagination({ totalPages }: PaginationProps) {
   const { pagination, setPagination } = useAppContext();
-  const { page, pageSize } = pagination;
+  const pageNumber = Number(pagination.pageNumber);
+  const pageSize = Number(pagination.pageSize);
 
-  const onChange = (newPage: number, newPageSize: number) => {
+  const onChange = (newPagination: components["schemas"]["Pagination"]) => {
     setPagination((prev) => ({
       ...prev,
-      page: newPage,
-      pageSize: newPageSize,
+      pageNumber: newPagination.pageNumber,
+      pageSize: newPagination.pageSize,
     }));
   };
 
@@ -25,32 +27,42 @@ function Pagination({ totalPages }: PaginationProps) {
       <div className="btn-group">
         <button
           className="button-secondary-small"
-          onClick={() => onChange(1, pageSize)}
-          disabled={page == 1}
+          onClick={() => onChange({ pageNumber: 1, pageSize })}
+          disabled={pageNumber == 1}
         >
           First
         </button>
         <button
           className="button-secondary-small"
-          onClick={() => onChange(page - 1, pageSize)}
-          disabled={page <= 1}
+          onClick={() =>
+            onChange({
+              pageNumber: pageNumber - 1,
+              pageSize,
+            })
+          }
+          disabled={pageNumber <= 1}
         >
           ⬅️ Previous
         </button>
         <span className="currentPage" aria-live="polite">
-          Page {page} of {totalPages}
+          Page {pageNumber} of {totalPages}
         </span>
         <button
           className="button-secondary-small"
-          onClick={() => onChange(page + 1, pageSize)}
-          disabled={page >= totalPages}
+          onClick={() =>
+            onChange({
+              pageNumber: pageNumber + 1,
+              pageSize,
+            })
+          }
+          disabled={pageNumber >= totalPages}
         >
           Next ➡️
         </button>
         <button
           className="button-secondary-small"
-          onClick={() => onChange(totalPages, pageSize)}
-          disabled={page == totalPages}
+          onClick={() => onChange({ pageNumber: totalPages, pageSize })}
+          disabled={pageNumber == totalPages}
         >
           Last
         </button>
@@ -59,7 +71,12 @@ function Pagination({ totalPages }: PaginationProps) {
         Rows per page
         <select
           value={pageSize}
-          onChange={(e) => onChange(page, Number(e.target.value))}
+          onChange={(e) =>
+            onChange({
+              pageNumber: pageNumber,
+              pageSize: Number(e.target.value),
+            })
+          }
         >
           <option value={10}>10</option>
           <option value={25}>25</option>

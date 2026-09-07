@@ -1,5 +1,5 @@
-import { BarChart, Bar, ReferenceLine, Tooltip } from "recharts";
 import "../scss/styles.scss";
+import { BarChart, Bar, ReferenceLine, Tooltip } from "recharts";
 
 type Props = {
   prices: number[];

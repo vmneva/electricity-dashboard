@@ -1,0 +1,87 @@
+@use "./_colors.scss" as _colors;
+@use "./_typography.scss" as typography;
+
+@mixin field-label {
+  font-family: typography.$font-family;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+@mixin field-input {
+  border: 1px solid _colors.$border;
+  border-radius: 4px;
+  padding: 8px;
+  font-family: typography.$font-family;
+  font-size: 14px;
+  min-width: 0;
+  background: #fff;
+
+  &:focus-visible {
+    outline: 2px solid _colors.$border;
+    outline-offset: 1px;
+    border-color: transparent;
+  }
+}
+
+.filter-panel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 24px;
+  padding: 16px;
+  margin-top: 10px;
+  border: 1px solid _colors.$border;
+  border-radius: 8px;
+}
+
+.search-input {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+
+  label {
+    @include field-label;
+  }
+  .input {
+    @include field-input;
+    width: 200px;
+  }
+}
+
+.date-range,
+.price-range {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: auto auto;
+  column-gap: 16px;
+  row-gap: 4px;
+
+  label {
+    @include field-label;
+  }
+  .input {
+    @include field-input;
+    width: 160px;
+  }
+}
+
+@media (max-width: 600px) {
+  .filter-panel {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-input .input {
+    width: 100%;
+  }
+
+  .date-range,
+  .price-range {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    .input {
+      width: 100%;
+    }
+  }
+}

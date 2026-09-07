@@ -1,29 +1,25 @@
+import "./scss/styles.scss";
+import "./App.scss";
 import { useState } from "react";
 import { useAppContext } from "./context/AppContext";
+import { useDailyData } from "./hooks/useDailyData";
+import type { components } from "./api/schema";
 import DataTable from "./components/DataTable";
 import Pagination from "./components/Pagination";
 import FilterBar from "./components/FilterBar";
 import SingleDayDetail from "./components/SingleDayDetail";
-import "./scss/styles.scss";
-import "./App.scss";
-import { useDailyData } from "./hooks/useDailyData";
-import type { components } from "./api/schema";
 
 function App() {
-  const { pagination } = useAppContext();
-  const [searchDate, setSearchDate] = useState("");
+  const { pagination, sorting, filtering } = useAppContext();
   const [dateSelected, setDateSelected] = useState<
     components["schemas"]["DailyData"]["date"] | null
   >(null);
 
-  const { data, isLoading, isFetching, error } = useDailyData(
+  const { data, isLoading, isFetching, error } = useDailyData({
     pagination,
-    searchDate,
-  );
-
-  function onSearchClick(date: string) {
-    setSearchDate(date);
-  }
+    sort: sorting,
+    filters: filtering,
+  });
 
   return (
     <div className="mainview">
@@ -32,7 +28,7 @@ function App() {
       {error && <p>Error loading data</p>}
       {data && (
         <div className={isFetching ? "is-updating" : "contents"}>
-          <FilterBar onClick={onSearchClick} />
+          <FilterBar />
           {dateSelected && (
             <SingleDayDetail
               date={dateSelected}

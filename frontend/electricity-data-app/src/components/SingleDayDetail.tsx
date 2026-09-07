@@ -1,6 +1,6 @@
+import "../scss/styles.scss";
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import "../scss/styles.scss";
 import { useSingleDayData } from "../hooks/useDailyData";
 import { formatDate, formatPrice, formatThousand } from "../utils/formatters";
 import PriceChart from "./PriceChart";

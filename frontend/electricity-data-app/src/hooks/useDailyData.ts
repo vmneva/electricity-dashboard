@@ -3,22 +3,15 @@ import {
   getDailyDataAsync,
   getSingleDayDataAsync,
 } from "../api/electricityData";
-import type { CurrentPagination } from "../types/currentPagination";
+import type { components } from "../api/schema";
 
-export function useDailyData(
-  pagination: CurrentPagination,
-  searchDate: string,
-) {
+export function useDailyData(req: components["schemas"]["DailyDataRequest"]) {
   return useQuery({
-    queryKey: ["dailyData", pagination, searchDate],
+    queryKey: ["dailyData", req],
     queryFn: () =>
-      getDailyDataAsync(
-        pagination.page,
-        pagination.pageSize,
-        pagination.orderBy,
-        pagination.orderDir,
-        searchDate,
-      ),
+      getDailyDataAsync({
+        ...req,
+      }),
     placeholderData: keepPreviousData,
   });
 }

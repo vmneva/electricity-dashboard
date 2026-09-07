@@ -43,7 +43,7 @@ namespace ElectricityData.Api.Controllers
         /// <param name="orderBy">Determines the column to order by</param>
         /// <returns>List of daily electricity data for the specified page with the given page size</returns>
         [HttpGet("daily-data")]
-        public async Task<PaginatedData> GetPageOfDailyData(int pageSize, int pageNumber, string orderDir = "asc", string orderBy = "date", string search = "")
+        public async Task<PaginatedData> GetPageOfDailyData([FromQuery] DailyDataRequest req)
         {
             // QUERY 1: fetch, aggregate, and order the data to daily rows
             var allDays = db.ElectricityDataRecords
@@ -56,14 +56,36 @@ namespace ElectricityData.Api.Controllers
                     AverageHourlyPrice = e.Average(d => d.HourlyPrice)
                 });
 
-            if (!string.IsNullOrEmpty(search))
+            // apply given search parameter if any
+            if (!string.IsNullOrEmpty(req.Filters?.Date))
             {
-                var date = DateOnly.TryParse(search, out var parsedDate) ? parsedDate : (DateOnly?)null;
+                var date = DateOnly.TryParse(req.Filters.Date, out var parsedDate) ? parsedDate : (DateOnly?)null;
                 allDays = allDays.Where(d => d.Date != null && d.Date.Value == date);
             }
 
-            bool descending = orderDir?.ToLower() == "desc";
-            allDays = orderBy.ToLowerInvariant() switch
+            // apply given filters if any
+            if (req.Filters != null)
+            {
+                if (req.Filters.StartDate.HasValue)
+                {
+                    allDays = allDays.Where(d => d.Date != null && d.Date.Value >= req.Filters.StartDate.Value);
+                }
+                if (req.Filters.EndDate.HasValue)
+                {
+                    allDays = allDays.Where(d => d.Date != null && d.Date.Value <= req.Filters.EndDate.Value);
+                }
+                if (req.Filters.MinPrice.HasValue)
+                {
+                    allDays = allDays.Where(d => d.AverageHourlyPrice != null && d.AverageHourlyPrice >= req.Filters.MinPrice.Value);
+                }
+                if (req.Filters.MaxPrice.HasValue)
+                {
+                    allDays = allDays.Where(d => d.AverageHourlyPrice != null && d.AverageHourlyPrice <= req.Filters.MaxPrice.Value);
+                }
+            }
+
+            bool descending = req.Sort?.OrderDir?.ToLower() == "desc";
+            allDays = req.Sort?.OrderBy?.ToLowerInvariant() switch
             {
                 "date" => descending ? allDays.OrderByDescending(e => e.Date) : allDays.OrderBy(e => e.Date),
                 "productionamount" => descending ? allDays.OrderByDescending(e => e.ProductionAmount) : allDays.OrderBy(e => e.ProductionAmount),
@@ -74,8 +96,8 @@ namespace ElectricityData.Api.Controllers
 
             // calculate the paginated data
             var paginatedRows = await allDays
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
+                .Skip((req.Pagination.PageNumber - 1) * req.Pagination.PageSize)
+                .Take(req.Pagination.PageSize)
                 .ToListAsync();
 
             // QUERY 2: fetch the data for the requested date
@@ -103,7 +125,7 @@ namespace ElectricityData.Api.Controllers
                     }
                 });
             }
-            result.AllPages = (int)Math.Ceiling((double)allDays.Count() / pageSize);
+            result.AllPages = (int)Math.Ceiling((double)allDays.Count() / req.Pagination.PageSize);
 
             return result;
         }

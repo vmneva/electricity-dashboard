@@ -1,82 +1,70 @@
-# dev-academy-autumn-2026-exercise
+# Electricity Data Dashboard
 
-This is the pre-assignment for Solita Dev Academy Finland Autumn 2026. But if you’re here just purely out of curiosity, feel free to snatch the idea and make your own app just for the fun of it!
+This project is a fullstack application for showing electricity data in a table format. Database contains data in hourly basis so app first sums it up to show data as daily rows. By clicking a row, a view with graph visualization of daily hour prices opens.
 
-Let's imagine that you have received an interesting project offer to create a UI and a backend service for displaying data from electricity production, consumption and prices. 
-The exercise uses data that is owned by Fingrid and combines that with electricity price data from porssisahko.net. 
+Table view supports
 
-# The exercise
-Create a web application that uses a backend service to fetch the data. Backend can be made with any technology. We at Solita use for example (not in preference order) Java/Kotlin/C#/TypeScript but you are free to choose any other technology as well. 
+- searching by date
+- ordering by columns
+- filtering by date and price ranges
+- opening single day view by clicking the date
 
-You are provided with Docker setup, with contains a PostgreSQL database with all the necessary data for the exercise. 
+Backend is ASP.NET Core Web API that fetches the data from PostgreSQL database. User interface is a simple React web app that calls for the API and just renders the data. All logic for handling the data is on the backend side. Visual graph for hourly prices per day is done using Recharts library. Styling is done using SCSS.
 
-You can also freely choose the frontend technologies to use. The important part is to give good instructions on how to build and run the project.
+## How to get started
 
-Please return the exercise as a link to github repository. 
+### Running backend with Docker
 
-## Use of Generative AI Tools
+From the repo root build new `api` container next to db ones:
 
-We welcome the use of generative AI tools as part of modern software development and recognize that they can be valuable in supporting ideation, learning, and implementation.
+    docker compose up --build -d
 
-In this assignment, we are interested in understanding the candidate’s own problem-solving approach, coding skills, and way of thinking. You are encouraged to use generative AI tools during the assignment, but you should explain in the README where and how you used them.
+API will run on http://localhost:5152.
 
-The submitted solution should reflect your own understanding and decisions, and you should be able to discuss and justify the work you present.
+### Running backend without Docker
 
-# Stuff to do 
+The database needs to be running in Docker. From `backend/`:
 
-## Daily statistics list (recommended features)
-- Total electricity consumption per day 
-- Total electricity production per day 
-- Average electricity price per day 
-- Longest consecutive time in hours, when electricity price has been negative, per day 
+    dotnet run --project ElectricityData.Api
 
-## Additional features for daily statistics list
-- Pagination 
-- Ordering per column 
-- Searching 
-- Filtering 
+API starts on the port shown in the console output.
 
-## Other additional features
-- Single day view 
--- Total electricity consumption per day 
--- Total electricity production per day 
--- Average electricity price per day 
--- Hour with most electricity consumption compared to production 
--- Cheapest electricity hours for the day 
-- Graph visualisations 
+## Running the frontend
 
-## Surprise us with 
-- Running backend in Docker 
-- Running backend in Cloud 
-- Implement E2E tests 
+Once backend is running, start frontend from `frontend/electricity-data-app`. First install dependencies and then run the app:
 
-# Instructions for running the database
-1. Install Docker Desktop on your computer (https://docs.docker.com/desktop/)
-2. Clone this repository
-3. On command line under this folder run:
+    npm install
+    npm run dev
 
-```
-docker compose up --build --renew-anon-volumes -d
-```
+The UI starts on http://localhost:5173 (or the port shown in the console).
 
-Please note that running that might take couple of minutes
+Note that if you are running backend without Docker, the `vite.config.ts` proxy targets port 5152 for the API requests to work. If that port is busy in your local machine, adjust the proxy. If API is running on Docker, everything should work automatically.
 
-4. Docker setup also comes with Adminer UI, where you can check your database contents at http://localhost:8088/
-5. Log into Adminer with following information (password: academy):
+## Running the tests
 
-![alt text](login.png)
+Backend has currently unit tests only to helper class. You can run the tests from `/backend/ElectricityData.Api.Tests`:
 
-Database is running at postgres://localhost:5432/electricity and the database name is electricity. Database comes with user academy (password: academy).
+    dotnet test
 
-# Database structure
-Database consists of one table electricityData.
+TODO: e2e tests
 
-## ElectricityData table
-| Column | Description | Type |
-| ----------- | ----------- | ----------- |
-| id | id, primary key | integer |
-| date | date of the data point | DATE |
-| startTime | Starting time of the hour for the data point | TIMESTAMP |
-| productionAmount | Electricity production for the hour MWh/h | NUMERIC(11,5) *NULL* |
-| consumptionAmount | Electricity consumption for the hour kWh | NUMERIC(11,3) *NULL* |
-| hourlyPrice | Electricity price for the hour | NUMERIC(6,3) *NULL* |
+## Tech stack
+
+| Area                | Technology                         | Purpose                             |
+| ------------------- | ---------------------------------- | ----------------------------------- |
+| Database            | PostgreSQL                         | Existing database running in Docker |
+| Backend             | C# + .NET10 (ASP.NET Core Web API) | REST API backend                    |
+| Database Access     | EF Core                            | Data access and ORM                 |
+| PostgreSQL Provider | Npgsql                             | PostgreSQL integration for .NET     |
+| API Documentation   | OpenAPI / Swagger                  | API documentation and testing       |
+| Frontend            | React + TypeScript + Vite          | User interface                      |
+| E2E Tests           | Playwright                         | End-to-end browser testing          |
+| Charts              | Recharts                           | Graph visualizations                |
+| Backend Unit Tests  | xUnit                              | Unit testing                        |
+| Containerization    | Docker                             | Containerize backend and database   |
+
+## Use of generative AI
+
+Claude ([https://claude.ai/](https://claude.ai/)) was used to plan a timetable for this project. It was also utilised with debugging, CSS style generating, and ensuring that new technologies, such as Recharts, were used efficiently since I also learned them through this exercise.
+
+Claude Code was not used. Github Copilot was already installed to VS Code so inline suggestions were enabled also in this project. However, everything that AI suggested or tried to correct was evaluated by human.

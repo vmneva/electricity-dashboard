@@ -1,9 +1,19 @@
 import { createContext, useContext } from "react";
-import type { CurrentPagination } from "../types/currentPagination";
+import type { components } from "../api/schema";
 
 type AppContextValue = {
-  pagination: CurrentPagination;
-  setPagination: React.Dispatch<React.SetStateAction<CurrentPagination>>;
+  pagination: components["schemas"]["Pagination"];
+  sorting: components["schemas"]["SortOptions"];
+  setPagination: React.Dispatch<
+    React.SetStateAction<components["schemas"]["Pagination"]>
+  >;
+  setSorting: React.Dispatch<
+    React.SetStateAction<components["schemas"]["SortOptions"]>
+  >;
+  filtering: components["schemas"]["FilterOptions"];
+  setFiltering: React.Dispatch<
+    React.SetStateAction<components["schemas"]["FilterOptions"]>
+  >;
 };
 
 const AppContext = createContext<AppContextValue | null>(null);

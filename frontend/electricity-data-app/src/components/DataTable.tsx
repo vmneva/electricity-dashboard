@@ -1,11 +1,11 @@
 import "../scss/styles.scss";
+import { useAppContext } from "../context/AppContext";
 import {
   formatDate,
   formatPrice,
   formatThousand,
   parseHour,
 } from "../utils/formatters";
-import { useAppContext } from "../context/AppContext";
 import type { components } from "../api/schema";
 
 type Props = {
@@ -14,17 +14,17 @@ type Props = {
 };
 
 function DataTable({ dayData, setDateSelected }: Props) {
-  const { pagination, setPagination } = useAppContext();
-  const { pageSize, orderBy, orderDir } = pagination;
+  const { pagination, sorting, setSorting } = useAppContext();
+  const { pageSize } = pagination;
+  const { orderBy, orderDir } = sorting;
 
   function handleHeaderClick(column: string) {
     const newOrderDir =
       orderBy === column && orderDir === "asc" ? "desc" : "asc";
-    setPagination((prev) => ({
-      ...prev,
+    setSorting({
       orderBy: column,
       orderDir: newOrderDir,
-    }));
+    });
   }
 
   function renderHeaderCell(

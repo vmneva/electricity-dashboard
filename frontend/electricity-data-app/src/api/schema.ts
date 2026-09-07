@@ -52,18 +52,18 @@ export interface paths {
         };
         get: {
             parameters: {
-                query?: {
-                    pageSize?: unknown;
-                    pageNumber?: unknown;
-                    orderDir?: string;
-                    orderBy?: string;
-                    search?: string;
-                };
+                query?: never;
                 header?: never;
                 path?: never;
                 cookie?: never;
             };
-            requestBody?: never;
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["DailyDataRequest"];
+                    "text/json": components["schemas"]["DailyDataRequest"];
+                    "application/*+json": components["schemas"]["DailyDataRequest"];
+                };
+            };
             responses: {
                 /** @description OK */
                 200: {
@@ -104,10 +104,32 @@ export interface components {
             averageHourlyPrice?: unknown;
             cheapestHour?: components["schemas"]["CheapestHour"];
         };
+        DailyDataRequest: {
+            pagination?: components["schemas"]["Pagination"];
+            sort?: components["schemas"]["SortOptions"];
+            filters?: components["schemas"]["FilterOptions"];
+        };
+        FilterOptions: {
+            date?: string;
+            /** Format: date */
+            startDate?: string | null;
+            /** Format: date */
+            endDate?: string | null;
+            /** Format: double */
+            minPrice?: unknown;
+            /** Format: double */
+            maxPrice?: unknown;
+        };
         PaginatedData: {
             dailyRows?: components["schemas"]["DailyData"][];
             /** Format: int32 */
             allPages?: unknown;
+        };
+        Pagination: {
+            /** Format: int32 */
+            pageSize?: unknown;
+            /** Format: int32 */
+            pageNumber?: unknown;
         };
         SingleDayData: {
             /** Format: date */
@@ -117,6 +139,10 @@ export interface components {
             /** Format: double */
             averageHourlyPrice?: unknown;
             allHourlyPrices?: unknown[];
+        };
+        SortOptions: {
+            orderDir?: string;
+            orderBy?: string;
         };
     };
     responses: never;

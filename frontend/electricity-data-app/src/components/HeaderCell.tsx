@@ -1,6 +1,5 @@
 import "../scss/styles.scss";
-import { useContext } from "react";
-import AppContext from "../context/AppContext";
+import { useAppContext } from "../context/AppContext";
 
 type Props = {
   label: string;
@@ -10,15 +9,18 @@ type Props = {
 };
 
 function HeaderCell({ label, value, isOrderable, handleClick }: Props) {
-  const { pagination } = useContext(AppContext)!;
-  const { orderBy, orderDir } = pagination;
+  const { sorting } = useAppContext();
 
   return (
     <th>
       {isOrderable ? (
         <button onClick={() => handleClick(value)}>
           {label}{" "}
-          {orderBy === value ? (orderDir === "asc" ? "🔽" : "🔼") : "🔽"}
+          {sorting.orderBy === value
+            ? sorting.orderDir === "asc"
+              ? "🔽"
+              : "🔼"
+            : "🔽"}
         </button>
       ) : (
         label
