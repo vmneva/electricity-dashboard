@@ -1,5 +1,4 @@
 using ElectricityData.Api.Helpers;
-using ElectricityData.Api.Models;
 
 namespace ElectricityData.Api.Tests;
 
