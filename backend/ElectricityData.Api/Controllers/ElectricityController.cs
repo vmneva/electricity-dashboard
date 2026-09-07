@@ -27,12 +27,10 @@ namespace ElectricityData.Api.Controllers
             return new SingleDayData
             {
                 Date = date,
-                ProductionTotal = (decimal)(dayData.Sum(d => d.ProductionAmount) ?? 0),
-                ConsumptionTotal = (decimal)(dayData.Sum(d => d.ConsumptionAmount) ?? 0),
+                ProductionTotal = dayData.Sum(d => d.ProductionAmount).ToString(),
+                ConsumptionTotal = dayData.Sum(d => d.ConsumptionAmount).ToString(),
                 AverageHourlyPrice = (decimal)(dayData.Average(d => d.HourlyPrice) ?? 0),
-                AllHourlyPrices = hourlyData.Select(h => (decimal?)(h.Price ?? 0) ?? 0).ToList(),
-                ProductionAmounts = dayData.Select(d => (decimal?)(d.ProductionAmount ?? 0) ?? 0).ToList(),
-                ConsumptionAmounts = dayData.Select(d => (decimal?)(d.ConsumptionAmount ?? 0) ?? 0).ToList()
+                AllHourlyPrices = [.. hourlyData.Select(h => (decimal?)(h.Price ?? 0))],
             };
         }
 
@@ -45,7 +43,7 @@ namespace ElectricityData.Api.Controllers
         /// <param name="orderBy">Determines the column to order by</param>
         /// <returns>List of daily electricity data for the specified page with the given page size</returns>
         [HttpGet("daily-data")]
-        public async Task<PaginatedResponse> GetPageOfDailyData(int pageSize, int pageNumber, string orderDir = "asc", string orderBy = "date", string search = "")
+        public async Task<PaginatedData> GetPageOfDailyData(int pageSize, int pageNumber, string orderDir = "asc", string orderBy = "date", string search = "")
         {
             // QUERY 1: fetch, aggregate, and order the data to daily rows
             var allDays = db.ElectricityDataRecords
@@ -86,7 +84,7 @@ namespace ElectricityData.Api.Controllers
                 .Where(d => dates.Contains(d.Date))
                 .ToListAsync();
 
-            var result = new PaginatedResponse();
+            var result = new PaginatedData();
 
             foreach (var day in paginatedRows)
             {
@@ -95,8 +93,8 @@ namespace ElectricityData.Api.Controllers
                 result.DailyRows.Add(new DailyData
                 {
                     Date = day.Date ?? DateOnly.MinValue,
-                    ProductionAmount = (decimal)(day.ProductionAmount ?? 0),
-                    ConsumptionAmount = (decimal)(day.ConsumptionAmount ?? 0),
+                    ProductionAmount = day.ProductionAmount.ToString(),
+                    ConsumptionAmount = day.ConsumptionAmount.ToString(),
                     AverageHourlyPrice = (decimal)(day.AverageHourlyPrice ?? 0),
                     CheapestHour = new CheapestHour
                     {

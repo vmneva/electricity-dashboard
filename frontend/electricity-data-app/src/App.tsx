@@ -1,17 +1,20 @@
+import { useState } from "react";
 import { useAppContext } from "./context/AppContext";
 import DataTable from "./components/DataTable";
 import Pagination from "./components/Pagination";
+import FilterBar from "./components/FilterBar";
+import SingleDayDetail from "./components/SingleDayDetail";
 import "./scss/styles.scss";
 import "./App.scss";
 import { useDailyData } from "./hooks/useDailyData";
-import FilterBar from "./components/FilterBar";
-import { useState } from "react";
-import SingleDayDetail from "./components/SingleDayDetail";
+import type { components } from "./api/schema";
 
 function App() {
   const { pagination } = useAppContext();
   const [searchDate, setSearchDate] = useState("");
-  const [dateSelected, setDateSelected] = useState<string | null>(null);
+  const [dateSelected, setDateSelected] = useState<
+    components["schemas"]["DailyData"]["date"] | null
+  >(null);
 
   const { data, isLoading, isFetching, error } = useDailyData(
     pagination,
@@ -36,8 +39,11 @@ function App() {
               onClose={() => setDateSelected(null)}
             />
           )}
-          <DataTable dayData={data.data} setDateSelected={setDateSelected} />
-          <Pagination totalPages={data.totalPages} />
+          <DataTable
+            dayData={data.dailyRows as components["schemas"]["DailyData"][]}
+            setDateSelected={setDateSelected}
+          />
+          <Pagination totalPages={data.allPages as number} />
         </div>
       )}
     </div>

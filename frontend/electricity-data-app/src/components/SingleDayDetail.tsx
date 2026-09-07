@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import "../scss/styles.scss";
 import { useSingleDayData } from "../hooks/useDailyData";
-import { formatDate, formatPrice } from "../utils/formatters";
+import { formatDate, formatPrice, formatThousand } from "../utils/formatters";
 import PriceChart from "./PriceChart";
 
 /*
@@ -45,14 +45,14 @@ function SingleDayDetail({ date, onClose }: Props) {
           </header>
           <dl>
             <dt>Total consumption of the day</dt>
-            <dd>{dayData.consumptionTotal} kWh</dd>
+            <dd>{formatThousand(dayData.consumptionTotal?.toString())} kWh</dd>
             <dt>Total production of the day</dt>
-            <dd>{dayData.productionTotal} MWh/h</dd>
+            <dd>{formatThousand(dayData.productionTotal?.toString())} MWh/h</dd>
             <dt>Average price of the day</dt>
             <dd>{formatPrice(dayData.averageHourlyPrice)} snt/kWh</dd>
           </dl>
           {dayData.averageHourlyPrice != 0 && (
-            <PriceChart prices={dayData.allHourlyPrices} />
+            <PriceChart prices={dayData.allHourlyPrices as number[]} />
           )}
         </>
       )}

@@ -1,6 +1,6 @@
 namespace ElectricityData.Api.Models;
 
-public class PaginatedResponse
+public class PaginatedData
 {
     public List<DailyData> DailyRows { get; set; } = [];
     public int AllPages { get; set; }
@@ -9,8 +9,8 @@ public class PaginatedResponse
 public class DailyData
 {
     public DateOnly Date { get; set; }
-    public decimal? ProductionAmount { get; set; }
-    public decimal? ConsumptionAmount { get; set; }
+    public string? ProductionAmount { get; set; }
+    public string? ConsumptionAmount { get; set; }
     public decimal? AverageHourlyPrice { get; set; }
     public CheapestHour CheapestHour {get; set; } = new();
 }

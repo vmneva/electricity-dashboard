@@ -1,10 +1,16 @@
 import "../scss/styles.scss";
-import { formatDate, formatPrice } from "../utils/formatters";
-import type { DayData } from "../types/dayData";
+import {
+  formatDate,
+  formatPrice,
+  formatThousand,
+  parseHour,
+} from "../utils/formatters";
 import { useAppContext } from "../context/AppContext";
+import type { components } from "../api/schema";
+
 type Props = {
-  dayData: DayData[];
-  setDateSelected: (date: string | null) => void;
+  dayData: components["schemas"]["DailyData"][];
+  setDateSelected: (date: components["schemas"]["DailyData"]["date"]) => void;
 };
 
 function DataTable({ dayData, setDateSelected }: Props) {
@@ -82,11 +88,11 @@ function DataTable({ dayData, setDateSelected }: Props) {
                     </button>
                   </td>
                   <td data-label="Consumption">
-                    {data.consumptionAmount}
+                    {formatThousand(data.consumptionAmount)}
                     <span className="unit">kWh</span>
                   </td>
                   <td data-label="Production">
-                    {data.productionAmount}
+                    {formatThousand(data.productionAmount)}
                     <span className="unit">MWh/h</span>
                   </td>
                   <td data-label="Average price">
@@ -96,10 +102,10 @@ function DataTable({ dayData, setDateSelected }: Props) {
                     )}
                   </td>
                   <td data-label="Cheapest hour">
-                    {data.cheapestHour.hour}{" "}
-                    {formatPrice(data.cheapestHour.price) !== "N/A" && (
+                    {parseHour(data.cheapestHour?.hour)}{" "}
+                    {formatPrice(data.cheapestHour?.price) !== "N/A" && (
                       <span className="unit">
-                        ({formatPrice(data.cheapestHour.price)} snt/kWh)
+                        ({formatPrice(data.cheapestHour?.price)} snt/kWh)
                       </span>
                     )}
                   </td>

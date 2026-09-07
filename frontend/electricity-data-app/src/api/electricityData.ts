@@ -1,10 +1,4 @@
-import type { SingleDayData } from "../types/singleDayData";
 import type { components } from "./schema";
-import {
-  mapApiDataToPaginatedData,
-  mapApiDataToSingleDayData,
-} from "../utils/mappers";
-import type { PaginatedData } from "../types/paginatedData";
 
 const baseUrl = "/api/electricity/daily-data";
 
@@ -14,14 +8,14 @@ const baseUrl = "/api/electricity/daily-data";
  */
 export async function getSingleDayDataAsync(
   date: string,
-): Promise<SingleDayData> {
+): Promise<components["schemas"]["SingleDayData"]> {
   const response = await fetch(`${baseUrl}/${date}`);
   if (!response.ok) {
     throw new Error(`Error fetching data: ${response.status}`);
   }
   const result: components["schemas"]["SingleDayData"] = await response.json();
 
-  return mapApiDataToSingleDayData(result);
+  return result;
 }
 
 /**
@@ -35,15 +29,14 @@ export async function getDailyDataAsync(
   orderBy: string,
   orderDir: "asc" | "desc",
   search?: string,
-): Promise<PaginatedData> {
+): Promise<components["schemas"]["PaginatedData"]> {
   const response = await fetch(
     `${baseUrl}?pageSize=${size}&pageNumber=${page}&orderBy=${orderBy}&orderDir=${orderDir}&search=${search ?? ""}`,
   );
   if (!response.ok) {
     throw new Error(`Error fetching data: ${response.status}`);
   }
-  const result: components["schemas"]["PaginatedResponse"] =
-    await response.json();
+  const result: components["schemas"]["PaginatedData"] = await response.json();
 
-  return mapApiDataToPaginatedData(result);
+  return result;
 }

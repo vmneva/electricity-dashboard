@@ -71,9 +71,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["PaginatedResponse"];
-                        "application/json": components["schemas"]["PaginatedResponse"];
-                        "text/json": components["schemas"]["PaginatedResponse"];
+                        "text/plain": components["schemas"]["PaginatedData"];
+                        "application/json": components["schemas"]["PaginatedData"];
+                        "text/json": components["schemas"]["PaginatedData"];
                     };
                 };
             };
@@ -98,15 +98,13 @@ export interface components {
         DailyData: {
             /** Format: date */
             date?: string;
-            /** Format: double */
-            productionAmount?: unknown;
-            /** Format: double */
-            consumptionAmount?: unknown;
+            productionAmount?: string | null;
+            consumptionAmount?: string | null;
             /** Format: double */
             averageHourlyPrice?: unknown;
             cheapestHour?: components["schemas"]["CheapestHour"];
         };
-        PaginatedResponse: {
+        PaginatedData: {
             dailyRows?: components["schemas"]["DailyData"][];
             /** Format: int32 */
             allPages?: unknown;
@@ -114,15 +112,11 @@ export interface components {
         SingleDayData: {
             /** Format: date */
             date?: string;
-            /** Format: double */
-            productionTotal?: unknown;
-            /** Format: double */
-            consumptionTotal?: unknown;
+            productionTotal?: string | null;
+            consumptionTotal?: string | null;
             /** Format: double */
             averageHourlyPrice?: unknown;
             allHourlyPrices?: unknown[];
-            productionAmounts?: unknown[];
-            consumptionAmounts?: unknown[];
         };
     };
     responses: never;
