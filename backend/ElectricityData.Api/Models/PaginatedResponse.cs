@@ -1,5 +1,7 @@
 namespace ElectricityData.Api.Models;
-
+/*
+ * Represents a paginated response of the daily electricity data.
+ */
 public class PaginatedData
 {
     public List<DailyData> DailyRows { get; set; } = [];

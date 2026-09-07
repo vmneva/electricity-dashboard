@@ -1,6 +1,8 @@
 // Model representing filter options for querying electricity data
 namespace ElectricityData.Api.Models;
-
+/*
+ * Represents filter options for querying data.
+ */
 public class FilterOptions
 {
     public string Date { get; set; } = "";

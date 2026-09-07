@@ -1,6 +1,10 @@
 import { createContext, useContext } from "react";
 import type { components } from "../api/schema";
 
+/**
+ * Context for managing application-wide state including pagination, sorting, and filtering options.
+ */
+
 type AppContextValue = {
   pagination: components["schemas"]["Pagination"];
   sorting: components["schemas"]["SortOptions"];
@@ -18,6 +22,7 @@ type AppContextValue = {
 
 const AppContext = createContext<AppContextValue | null>(null);
 
+// Provides access to the AppContext and its state from components.
 export function useAppContext() {
   const context = useContext(AppContext);
   if (!context) {

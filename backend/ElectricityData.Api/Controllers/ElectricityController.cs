@@ -37,10 +37,7 @@ namespace ElectricityData.Api.Controllers
         /// <summary>
         /// Fetches paginated daily electricity data
         /// </summary>
-        /// <param name="pageSize">Determined the number of days to fetch</param>
-        /// <param name="pageNumber">Determines which page of data to fetch</param>
-        /// <param name="orderDir">Determines the order direction, either "asc" or "desc"</param>
-        /// <param name="orderBy">Determines the column to order by</param>
+        /// <param name="req">The request object containing pagination, sorting, and filtering options</param>
         /// <returns>List of daily electricity data for the specified page with the given page size</returns>
         [HttpGet("daily-data")]
         public async Task<PaginatedData> GetPageOfDailyData([FromQuery] DailyDataRequest req)
@@ -84,6 +81,7 @@ namespace ElectricityData.Api.Controllers
                 }
             }
 
+            // sort the data according given column (or default to date) and order direction (default to ascending)
             bool descending = req.Sort?.OrderDir?.ToLower() == "desc";
             allDays = req.Sort?.OrderBy?.ToLowerInvariant() switch
             {
@@ -107,7 +105,6 @@ namespace ElectricityData.Api.Controllers
                 .ToListAsync();
 
             var result = new PaginatedData();
-
             foreach (var day in paginatedRows)
             {
                 List<(DateTime? Hour, double? Price)> hourlyDataForDay = [.. hourlyData.Where(d => d.Date == day.Date).Select(d => (d.StartTime, d.HourlyPrice))];

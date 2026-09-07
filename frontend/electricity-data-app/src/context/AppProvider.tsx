@@ -2,6 +2,10 @@ import { useState, useMemo, type ReactNode } from "react";
 import AppContext from "./AppContext";
 import type { components } from "../api/schema";
 
+/**
+ * Provider component for the AppContext.
+ */
+
 export function AppProvider({ children }: { children: ReactNode }) {
   const [pagination, setPagination] = useState<
     components["schemas"]["Pagination"]

@@ -1,15 +1,15 @@
 # Electricity Data Dashboard
 
-This project is a fullstack application for showing electricity data in a table format. Database contains data in hourly basis so app first sums it up to show data as daily rows. By clicking a row, a view with graph visualization of daily hour prices opens.
+This project is a fullstack application for showing electricity data in a table format. Database contains data in hourly basis so app first sums it up to show data as daily rows.
 
 Table view supports
 
 - searching by date
 - ordering by columns
 - filtering by date and price ranges
-- opening single day view by clicking the date
+- opening single day view with price graph by clicking the date cell
 
-Backend is ASP.NET Core Web API that fetches the data from PostgreSQL database. User interface is a simple React web app that calls for the API and just renders the data. All logic for handling the data is on the backend side. Visual graph for hourly prices per day is done using Recharts library. Styling is done using SCSS.
+Backend is ASP.NET Core Web API that fetches the data from PostgreSQL database. User interface is a simple React web app that calls for the API and just renders the data. All logic for handling the data is on the backend side. For state management, frontend side uses React Context and React Query. Visual graph for hourly prices per day is done using Recharts library. Styling is done using SCSS.
 
 ## How to get started
 
@@ -42,29 +42,28 @@ Note that if you are running backend without Docker, the `vite.config.ts` proxy 
 
 ## Running the tests
 
-Backend has currently unit tests only to helper class. You can run the tests from `/backend/ElectricityData.Api.Tests`:
+Backend has currently unit tests only for the helper class `HourPriceHelper.cs`. You can run the tests from `/backend/ElectricityData.Api.Tests`:
 
     dotnet test
 
-TODO: e2e tests
+Time ran short with E2E tests on the frontend side.
 
 ## Tech stack
 
-| Area                | Technology                         | Purpose                             |
-| ------------------- | ---------------------------------- | ----------------------------------- |
-| Database            | PostgreSQL                         | Existing database running in Docker |
-| Backend             | C# + .NET10 (ASP.NET Core Web API) | REST API backend                    |
-| Database Access     | EF Core                            | Data access and ORM                 |
-| PostgreSQL Provider | Npgsql                             | PostgreSQL integration for .NET     |
-| API Documentation   | OpenAPI / Swagger                  | API documentation and testing       |
-| Frontend            | React + TypeScript + Vite          | User interface                      |
-| E2E Tests           | Playwright                         | End-to-end browser testing          |
-| Charts              | Recharts                           | Graph visualizations                |
-| Backend Unit Tests  | xUnit                              | Unit testing                        |
-| Containerization    | Docker                             | Containerize backend and database   |
+| Area                | Technology                         |
+| ------------------- | ---------------------------------- |
+| Database            | PostgreSQL                         |
+| Backend             | C# + .NET10 (ASP.NET Core Web API) |
+| Database Access     | EF Core                            |
+| PostgreSQL Provider | Npgsql                             |
+| API Documentation   | OpenAPI / Swagger                  |
+| Frontend            | React + TypeScript + Vite          |
+| Graphs              | Recharts                           |
+| Backend Unit Tests  | xUnit                              |
+| Containerization    | Docker                             |
 
 ## Use of generative AI
 
-Claude ([https://claude.ai/](https://claude.ai/)) was used to plan a timetable for this project. It was also utilised with debugging, CSS style generating, and ensuring that new technologies, such as Recharts, were used efficiently since I also learned them through this exercise.
+Claude ([https://claude.ai/](https://claude.ai/)) was used to plan a timetable and suitable stack for this project with current knowledge. It was also utilised with debugging, CSS style generating, and ensuring that new technologies, such as Recharts, were used efficiently since I also learned them through this exercise.
 
 Claude Code was not used. Github Copilot was already installed to VS Code so inline suggestions were enabled also in this project. However, everything that AI suggested or tried to correct was evaluated by human.

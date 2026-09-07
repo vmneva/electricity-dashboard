@@ -1,9 +1,11 @@
-using System;
 using Microsoft.EntityFrameworkCore;
 using ElectricityData.Api.Models;
 
 namespace ElectricityData.Api.Data;
-
+/*
+ * Class for the Entity Framework database context for database data.
+ * This allows querying the data using EF Core.
+ */
 public class ElectricityDbContext(DbContextOptions<ElectricityDbContext> options) : DbContext(options)
 {
     public DbSet<ElectricityDataRecord> ElectricityDataRecords { get; set; }

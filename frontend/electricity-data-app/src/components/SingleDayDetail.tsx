@@ -5,10 +5,6 @@ import { useSingleDayData } from "../hooks/useDailyData";
 import { formatDate, formatPrice, formatThousand } from "../utils/formatters";
 import PriceChart from "./PriceChart";
 
-/*
-Component for the detailed popup view of one day's data
-*/
-
 type Props = {
   date: string;
   onClose: () => void;

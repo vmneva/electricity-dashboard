@@ -1,13 +1,6 @@
 import "../scss/styles.scss";
 import { useState } from "react";
 import { useAppContext } from "../context/AppContext";
-/*
-  Filter bar component containing options to
-    - search by date
-    - filter by
-      - date range
-      - price range
-*/
 
 function FilterBar() {
   const { setFiltering } = useAppContext();

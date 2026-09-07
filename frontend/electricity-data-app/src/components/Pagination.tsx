@@ -1,9 +1,6 @@
 import "../scss/styles.scss";
 import { useAppContext } from "../context/AppContext";
 import type { components } from "../api/schema";
-/**
- * Component to render pagination controls for the table.
- */
 
 type PaginationProps = {
   totalPages: number;

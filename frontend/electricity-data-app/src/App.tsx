@@ -15,6 +15,7 @@ function App() {
     components["schemas"]["DailyData"]["date"] | null
   >(null);
 
+  // Fetch data based on the current pagination, sorting, and filtering options
   const { data, isLoading, isFetching, error } = useDailyData({
     pagination,
     sort: sorting,

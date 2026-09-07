@@ -1,8 +1,9 @@
-using System;
 using System.Text.Json.Serialization;
 
 namespace ElectricityData.Api.Models;
-
+/*
+ * Represents a single record of electricity data from the database.
+ */
 public class ElectricityDataRecord
 {
     [JsonPropertyName("id")]
