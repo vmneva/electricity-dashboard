@@ -9,7 +9,9 @@ Table view supports
 - filtering by date and price ranges
 - opening single day view with price graph by clicking the date cell
 
-Backend is ASP.NET Core Web API that fetches the data from PostgreSQL database. User interface is a simple React web app that calls for the API and just renders the data. All logic for handling the data is on the backend side. For state management, frontend side uses React Context and React Query. Visual graph for hourly prices per day is done using Recharts library. Styling is done using SCSS.
+Backend is ASP.NET Core Web API that fetches the data from PostgreSQL database. User interface is a simple Vite React app that calls for the API. All logic for handling the data happens on the server side. 
+
+For state management, frontend side uses React Context and React Query. Visual graph for hourly prices per day is done using Recharts library. Styling is done using SCSS.
 
 ## How to get started
 
@@ -48,17 +50,18 @@ Backend has currently unit tests only for the helper class `HourPriceHelper.cs`.
 
     dotnet test
 
-Time ran short with E2E tests on the frontend side.
+Time ran short so no frontend tests are currently available. Plan was to implement them using Playwright.
 
 ## Tech stack
+
+Tech stack builds up strongly on my latest projects and knowledge on fullstack development. I also used Claude Chat to ensure that the tools and technologies actually support each other well.
 
 | Area                | Technology                         |
 | ------------------- | ---------------------------------- |
 | Database            | PostgreSQL                         |
 | Backend             | C# + .NET10 (ASP.NET Core Web API) |
 | Database Access     | EF Core                            |
-| PostgreSQL Provider | Npgsql                             |
-| API Documentation   | OpenAPI / Swagger                  |
+| PostgreSQL Provider | Npgsql             
 | Frontend            | React + TypeScript + Vite          |
 | Graphs              | Recharts                           |
 | Backend Unit Tests  | xUnit                              |
