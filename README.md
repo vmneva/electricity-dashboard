@@ -1,6 +1,6 @@
 # Electricity Data Dashboard
 
-This project is a fullstack application for showing electricity data in a table format. Database contains data in hourly basis so app first sums it up to show data as daily rows.
+This project is a fullstack application for showing electricity data in a table format. Database contains data in hourly basis so app first sums it up to show data as daily rows. Project is part of Solita Academy task for autumn 2026.
 
 Table view supports
 
